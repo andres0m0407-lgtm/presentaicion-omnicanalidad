@@ -124,32 +124,8 @@ function result(){const tot=ans.filter(a=>a.ok).length,red=Q.map((q,k)=>({q,k,a:
  <div class="row"><button class="go pill" onclick="start()">Repetir</button><a class="btn pill" href="${DECK}" target="_blank" rel="noopener">Ir a las diapositivas</a></div>`}
 function score(items){return items.filter(x=>x.a.ok).length*2+items.filter(x=>x.a.ok&&x.a.sure).length-items.filter(x=>!x.a.ok&&x.a.sure).length*1}
 
-/* ---------- Modo clase (proyector) ---------- */
-let ci=0,T=store.get('tally9')||Q.map(q=>q.o.map(()=>0)),resetAsk=false;
-function clase(){document.body.classList.add('proj');const q=Q[ci],A=AREAS[q.a];
- app.innerHTML=`<div class="top"><span class="tag" style="--c:${A.v}">Modo clase · ${A.n} · ${A.w}</span><span class="row">${theme()}<a class="btn" href="#">Salir</a></span></div>
- <div class="dots" aria-hidden="true">${Q.map((x,k)=>`<i class="${k<=ci?'d':''} ${k==ci?'cur':''}" style="--c:${AREAS[x.a].v}"></i>`).join('')}</div>
- <section class="card" style="--c:${A.v}"><span class="m sm">Caso ${ci+1} de ${Q.length}. Pidan que alcen la mano por A, B o C y cuenten.</span><h2>${q.t}</h2>
- <ul class="opts">${q.o.map((o,k)=>`<li class="cnt"><div class="opt ${''}" style="border:2px solid var(--ink);border-radius:14px;padding:.7em 1em;display:flex;gap:.8em"><b>${L[k]}</b><span>${o}</span></div><div class="step"><button onclick="bump(${k},-1)" aria-label="Restar a ${L[k]}">−</button><output>${T[ci][k]}</output><button onclick="bump(${k},1)" aria-label="Sumar a ${L[k]}">+</button></div></li>`).join('')}</ul>
- <div class="row"><button class="pill" onclick="cgo(-1)" ${ci?'':'disabled'}>Anterior</button><button class="go pill" onclick="cgo(1)">${ci<Q.length-1?'Siguiente':'Ver resultados'}</button><button class="pill" onclick="creveal()">Ver respuesta</button></div><div id="rv"></div></section>`}
-function bump(k,d){T[ci][k]=Math.max(0,T[ci][k]+d);store.set('tally9',T);clase()}
-function cgo(d){if(d>0&&ci==Q.length-1){cres();return}ci=Math.max(0,Math.min(Q.length-1,ci+d));clase()}
-function creveal(){const q=Q[ci];$('#rv').innerHTML=`<div class="fb"><b>Respuesta: ${L[q.c]}. ${q.o[q.c]}</b><p>${q.e}</p></div>`}
-function cres(){document.body.classList.add('proj');
- const tt=Q.map((q,k)=>{const n=T[k].reduce((a,b)=>a+b,0);return {q,k,n,r:n?T[k][q.c]/n:null}});
- const per=AREAS.map((A,ai)=>{const it=tt.filter(x=>x.q.a==ai&&x.n);const n=it.reduce((a,x)=>a+x.n,0),r=it.reduce((a,x)=>a+T[x.k][x.q.c],0);return {A,r:n?r/n:null,n}});
- const low=tt.filter(x=>x.r!=null).sort((a,b)=>a.r-b.r)[0],lowA=per.filter(p=>p.r!=null).sort((a,b)=>a.r-b.r)[0];
- const pc=v=>v==null?'sin votos':Math.round(v*100)+' %';
- app.innerHTML=`<div class="top"><span class="m sm">Resultados de la clase</span><span class="row">${theme()}<button onclick="ci=Q.length-1;clase()">Volver</button></span></div>
- <h1>Dónde reforzar</h1>
- ${lowA?`<div class="card" style="--c:${lowA.A.v}"><span class="tag">Tema más flojo</span><h2>${lowA.A.n}</h2><p class="m">${pc(lowA.r)} de aciertos. Le toca repasarlo a ${lowA.A.w}.</p></div>`:'<p class="m">Aún no hay votos registrados.</p>'}
- <section class="card map">${per.map(p=>`<div class="ar" style="--c:${p.A.v}"><div><b>${p.A.n}</b> <span class="m sm">· ${p.A.w} · ${pc(p.r)}</span></div><div class="bar"><i style="width:${(p.r||0)*100}%"></i></div></div>`).join('')}</section>
- <section class="card"><h2>Caso por caso</h2>${tt.map(x=>`<div class="qrow"><b class="sm">Caso ${x.k+1} · ${pc(x.r)} acertó (${x.n} votos)</b><span class="sm m">${x.q.t}</span><div class="bar"><i style="width:${(x.r||0)*100}%"></i></div>${low&&low.k==x.k?`<span class="sm"><b>Es el caso más flojo.</b> Repasar la diapositiva ${x.q.s}.</span>`:''}</div>`).join('')}</section>
- ${resetAsk?`<div class="card"><p>¿Borrar todos los votos de la clase?</p><div class="row"><button class="go pill" onclick="doReset()">Sí, borrar</button><button class="pill" onclick="resetAsk=false;cres()">Cancelar</button></div></div>`:`<button class="pill" onclick="resetAsk=true;cres()">Reiniciar votos</button>`}`}
-function doReset(){T=Q.map(q=>q.o.map(()=>0));store.set('tally9',T);resetAsk=false;ci=0;clase()}
-
-function route(){document.body.classList.remove('proj');if(location.hash=='#clase')clase();else{if(ans.length&&ans.length<=Q.length&&i<Q.length&&ans.length==Q.length)result();else intro()}scrollTo(0,0)}
-addEventListener('hashchange',route);route();
+function route(){if(ans.length==Q.length)result();else intro();scrollTo(0,0)}
+route();
 </script>
 
 </body>

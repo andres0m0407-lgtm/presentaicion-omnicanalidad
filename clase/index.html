@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>[hidden]{display:none!important}body{margin:0}img{max-width:100%}</style>
+<title>Consultoría exprés · Panel de clase</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;800&family=Figtree:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: una sola columna centrada; cada caso es una tarjeta; el mapa de brechas usa una fila por expositor */
+:root{--bg:#eef1f6;--card:#ffffff;--ink:#0f1b3d;--mut:#4d5878;--ln:#0f1b3d2e;--p1:#2c4bff;--p2:#f2b705;--p3:#d1198e;--ok:#0b7a54;--bad:#c4202f;--okbg:#0b7a5422;--badbg:#c4202f22;--on-fill:#ffffff;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1230;--card:#131c42;--ink:#e8ecf8;--mut:#9aa6c7;--ln:#ffffff30;--p1:#6f86ff;--p2:#ffd23f;--p3:#ff5cc0;--ok:#3ddc97;--bad:#ff7b86;--okbg:#3ddc9726;--badbg:#ff7b8626;--on-fill:#0b1230;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0b1230;--card:#131c42;--ink:#e8ecf8;--mut:#9aa6c7;--ln:#ffffff30;--p1:#6f86ff;--p2:#ffd23f;--p3:#ff5cc0;--ok:#3ddc97;--bad:#ff7b86;--okbg:#3ddc9726;--badbg:#ff7b8626;--on-fill:#0b1230;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.5 Figtree,system-ui,sans-serif;padding-block:20px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+main{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:18px;min-width:0}
+h1,h2,h3{font-family:Unbounded,"Arial Black",system-ui,sans-serif;letter-spacing:-.03em;line-height:1.1;margin:0;font-weight:800;text-wrap:balance}
+h1{font-size:clamp(30px,8vw,52px)}h2{font-size:clamp(21px,5vw,30px)}h3{font-size:16px;font-weight:500}
+p{margin:0}.m{color:var(--mut)}.sm{font-size:.86em}
+button,.btn{font:inherit;color:var(--ink);background:var(--card);border:2px solid var(--ink);border-radius:14px;padding:.7em 1em;cursor:pointer;text-align:left;text-decoration:none;display:block}
+button:hover:not(:disabled){background:var(--ink);color:var(--bg)}button:disabled{cursor:default}
+:focus-visible{outline:3px solid var(--p1);outline-offset:2px}
+.pill{border-radius:99px;text-align:center;padding:.55em 1.2em;display:inline-block}
+.go{background:var(--ink);color:var(--bg);font-weight:700}.go:hover:not(:disabled){background:var(--p1);color:var(--on-fill);border-color:var(--p1)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.dots{display:flex;gap:6px}.dots i{flex:1;height:8px;border-radius:9px;background:var(--ln)}.dots i.d{background:var(--c)}.dots i.cur{outline:2px solid var(--ink);outline-offset:2px}
+.card{background:var(--card);border:2px solid var(--ink);border-radius:18px;padding:clamp(16px,4vw,26px);display:flex;flex-direction:column;gap:14px;min-width:0}
+.tag{display:inline-flex;align-items:center;gap:.6em;font-weight:700;color:var(--mut);font-size:.88em}.tag::before{content:"";width:2em;height:.4em;border-radius:9em;background:var(--c)}
+.opts{display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none}
+.opt{width:100%;display:flex;gap:.8em;align-items:flex-start}.opt b{flex:none;width:1.7em;height:1.7em;border-radius:50%;border:2px solid currentColor;display:grid;place-items:center;font-size:.85em}
+.opt.sel{border-color:var(--p1);box-shadow:0 0 0 3px var(--p1) inset}
+.opt.right{border-color:var(--ok);background:var(--okbg);color:var(--ink)}.opt.wrong{border-color:var(--bad);background:var(--badbg);color:var(--ink)}
+.fb{border-left:6px solid var(--ok);padding:.2em 0 .2em 14px;display:flex;flex-direction:column;gap:6px}.fb.no{border-color:var(--bad)}
+.fb a{color:var(--ink);font-weight:700}
+.map{display:flex;flex-direction:column;gap:14px}
+.ar{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+.ar>div:first-child{border-top:6px solid var(--c);padding-top:6px}
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.tile{border:2px solid var(--ink);border-radius:12px;padding:.5em .6em;font-size:.82em;line-height:1.25;min-height:4.4em;display:flex;flex-direction:column;justify-content:space-between;gap:4px}
+.tile b{font-size:1.05em}
+.t-os{background:var(--ok);border-color:var(--ok);color:var(--on-fill)}
+.t-od{background:var(--okbg);border-color:var(--ok)}
+.t-bd{background:var(--badbg);border-color:var(--bad);border-style:dashed}
+.t-bs{background:var(--bad);border-color:var(--bad);color:var(--on-fill)}
+.key{display:flex;gap:8px 16px;flex-wrap:wrap;font-size:.82em;color:var(--mut)}
+.bar{height:14px;border-radius:9px;background:var(--badbg);overflow:hidden;border:1.5px solid var(--ink)}.bar>i{display:block;height:100%;background:var(--ok)}
+.qrow{display:flex;flex-direction:column;gap:6px;padding-top:12px;border-top:1px solid var(--ln)}
+.cnt{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center}
+.step{display:flex;align-items:center;gap:8px}.step button{width:44px;height:44px;padding:0;text-align:center;font-size:1.3em;border-radius:50%}
+.step output{min-width:2ch;text-align:center;font-weight:700;font-variant-numeric:tabular-nums}
+.top{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.top a,.top button{font-size:.85em;padding:.35em .9em;border-radius:99px;color:var(--ink)}
+.proj .opt{font-size:1.15em}
+</style>
+</head>
+<body>
+<main id="app" aria-live="polite"></main>
+<script>
+const DECK='https://claude.ai/artifact/TAwmWQg3MWiDsTPWrpetVw';
+const AREAS=[
+ {n:'El marco',w:'Sam Tovar',v:'var(--p1)'},
+ {n:'Dell y Nike',w:'Luis Cruz',v:'var(--p2)'},
+ {n:'Soluciones y omnicanalidad',w:'Andrés Martínez',v:'var(--p3)'}];
+const Q=[
+ {a:0,t:'Una marca vende en su tienda online más barato que sus distribuidores físicos, y ellos ya reclaman. ¿Qué está pasando?',o:['Un conflicto de canal','Un sistema vertical contractual','Una cobertura exclusiva'],c:0,s:3,e:'Precios distintos entre canales y competencia por los mismos clientes son causas típicas de conflicto de canal.'},
+ {a:0,t:'Un fabricante deja de vender directo y pasa a mayoristas y minoristas. ¿Qué pierde?',o:['Cobertura de mercado','Control sobre precio, marca y atención','Inversión inicial baja'],c:1,s:2,e:'Mayor cobertura y menor inversión inicial son ventajas del canal indirecto. Lo que se cede es control, y el margen se reparte entre los eslabones.'},
+ {a:0,t:'Un fabricante grande amenaza con retirar el surtido a un minorista que no siga su precio sugerido. ¿Qué tipo de poder usa?',o:['Poder de recompensa','Poder de coerción','Poder de referencia'],c:1,s:3,e:'Amenazar con una sanción es coerción. La recompensa, en cambio, ofrece beneficios a cambio de cooperar.'},
+ {a:1,t:'En 2007 Dell, que vendía solo directo, anunció PCs en Wal-Mart. ¿Por qué?',o:['Para dejar de fabricar a la medida','Para llegar a clientes que su canal directo no alcanzaba','Porque cerró su tienda online'],c:1,s:4,e:'Según un vocero de Dell citado por eWeek, el 90 % de los hogares de EE. UU. compra en Wal-Mart. Era alcance, no abandono del canal directo.'},
+ {a:1,t:'¿Cuál era la complejidad de fondo de combinar venta directa y retail en Dell?',o:['Dos modelos operativos distintos: personalizado bajo pedido y estandarizado en volumen','Wal-Mart exigía fabricar en otro país','No existía demanda de PCs en tiendas'],c:0,s:5,e:'Eran modelos difíciles de optimizar a la vez. La salida planteada fue un modelo híbrido según el tipo de producto y su madurez (Kellogg Insight).'},
+ {a:1,t:'Nike impulsó la venta directa desde 2017 y recortó socios. ¿Qué vino después?',o:['Los socios aumentaron sus pedidos','Nike cerró su e-commerce','Rivales como On y Hoka ganaron espacio y Nike volvió a reconstruir a sus mayoristas'],c:2,s:6,e:'On y Hoka ganaron espacio en Dick’s en 2023 y desde octubre de 2024 Elliott Hill reconstruye la relación con mayoristas (Retail Dive).'},
+ {a:2,t:'Dos canales de una misma empresa son idénticos en precio, servicio y cliente. ¿Qué anticipa el principio de Gause?',o:['Que se complementan solos','Que terminarán chocando, así que deben diferenciarse','Que se fusionan en un SVM'],c:1,s:8,e:'Competidores idénticos no pueden coexistir. Hay que distinguirlos por servicio, precio, formato o segmento.'},
+ {a:2,t:'Una marca coordina su canal mediante franquicias. ¿Qué tipo de sistema vertical de marketing es?',o:['Corporativo','Contractual','Administrado'],c:1,s:8,e:'Corporativo: la empresa es dueña de los eslabones. Contractual: acuerdos como las franquicias. Administrado: coordina el miembro con más poder.'},
+ {a:2,t:'¿Qué hace de Compra y Recoge de Éxito un caso de omnicanalidad y no solo de tener varios canales?',o:['Tener más canales que la competencia','Vender también por redes sociales','Integrar canales: se compra online y se retira en tienda sobre un inventario unificado'],c:2,s:9,e:'Omnicanalidad es integrar, no sumar canales. Requiere inventario unificado, bodega (WMS) y una entrega bien coordinada.'}];
+const START=[2,4,7];
+const L='ABC',$=s=>document.querySelector(s),app=$('#app');
+const slide=n=>DECK+'#'+n;
+const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const theme=()=>`<button onclick="th()" aria-label="Cambiar tema">Tema</button>`;
+function th(){const R=document.documentElement;R.dataset.theme=(R.dataset.theme||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'))=='dark'?'light':'dark'}
+
+/* ---------- Modo clase (proyector) ---------- */
+let ci=0,T=store.get('tally9')||Q.map(q=>q.o.map(()=>0)),resetAsk=false;
+function clase(){document.body.classList.add('proj');const q=Q[ci],A=AREAS[q.a];
+ app.innerHTML=`<div class="top"><span class="tag" style="--c:${A.v}">Modo clase · ${A.n} · ${A.w}</span><span class="row">${theme()}</span></div>
+ <div class="dots" aria-hidden="true">${Q.map((x,k)=>`<i class="${k<=ci?'d':''} ${k==ci?'cur':''}" style="--c:${AREAS[x.a].v}"></i>`).join('')}</div>
+ <section class="card" style="--c:${A.v}"><span class="m sm">Caso ${ci+1} de ${Q.length}. Pidan que alcen la mano por A, B o C y cuenten.</span><h2>${q.t}</h2>
+ <ul class="opts">${q.o.map((o,k)=>`<li class="cnt"><div class="opt ${''}" style="border:2px solid var(--ink);border-radius:14px;padding:.7em 1em;display:flex;gap:.8em"><b>${L[k]}</b><span>${o}</span></div><div class="step"><button onclick="bump(${k},-1)" aria-label="Restar a ${L[k]}">−</button><output>${T[ci][k]}</output><button onclick="bump(${k},1)" aria-label="Sumar a ${L[k]}">+</button></div></li>`).join('')}</ul>
+ <div class="row"><button class="pill" onclick="cgo(-1)" ${ci?'':'disabled'}>Anterior</button><button class="go pill" onclick="cgo(1)">${ci<Q.length-1?'Siguiente':'Ver resultados'}</button><button class="pill" onclick="creveal()">Ver respuesta</button></div><div id="rv"></div></section>`}
+function bump(k,d){T[ci][k]=Math.max(0,T[ci][k]+d);store.set('tally9',T);clase()}
+function cgo(d){if(d>0&&ci==Q.length-1){cres();return}ci=Math.max(0,Math.min(Q.length-1,ci+d));clase()}
+function creveal(){const q=Q[ci];$('#rv').innerHTML=`<div class="fb"><b>Respuesta: ${L[q.c]}. ${q.o[q.c]}</b><p>${q.e}</p></div>`}
+function cres(){document.body.classList.add('proj');
+ const tt=Q.map((q,k)=>{const n=T[k].reduce((a,b)=>a+b,0);return {q,k,n,r:n?T[k][q.c]/n:null}});
+ const per=AREAS.map((A,ai)=>{const it=tt.filter(x=>x.q.a==ai&&x.n);const n=it.reduce((a,x)=>a+x.n,0),r=it.reduce((a,x)=>a+T[x.k][x.q.c],0);return {A,r:n?r/n:null,n}});
+ const low=tt.filter(x=>x.r!=null).sort((a,b)=>a.r-b.r)[0],lowA=per.filter(p=>p.r!=null).sort((a,b)=>a.r-b.r)[0];
+ const pc=v=>v==null?'sin votos':Math.round(v*100)+' %';
+ app.innerHTML=`<div class="top"><span class="m sm">Resultados de la clase</span><span class="row">${theme()}<button onclick="ci=Q.length-1;clase()">Volver</button></span></div>
+ <h1>Dónde reforzar</h1>
+ ${lowA?`<div class="card" style="--c:${lowA.A.v}"><span class="tag">Tema más flojo</span><h2>${lowA.A.n}</h2><p class="m">${pc(lowA.r)} de aciertos. Le toca repasarlo a ${lowA.A.w}.</p></div>`:'<p class="m">Aún no hay votos registrados.</p>'}
+ <section class="card map">${per.map(p=>`<div class="ar" style="--c:${p.A.v}"><div><b>${p.A.n}</b> <span class="m sm">· ${p.A.w} · ${pc(p.r)}</span></div><div class="bar"><i style="width:${(p.r||0)*100}%"></i></div></div>`).join('')}</section>
+ <section class="card"><h2>Caso por caso</h2>${tt.map(x=>`<div class="qrow"><b class="sm">Caso ${x.k+1} · ${pc(x.r)} acertó (${x.n} votos)</b><span class="sm m">${x.q.t}</span><div class="bar"><i style="width:${(x.r||0)*100}%"></i></div>${low&&low.k==x.k?`<span class="sm"><b>Es el caso más flojo.</b> Repasar la diapositiva ${x.q.s}.</span>`:''}</div>`).join('')}</section>
+ ${resetAsk?`<div class="card"><p>¿Borrar todos los votos de la clase?</p><div class="row"><button class="go pill" onclick="doReset()">Sí, borrar</button><button class="pill" onclick="resetAsk=false;cres()">Cancelar</button></div></div>`:`<button class="pill" onclick="resetAsk=true;cres()">Reiniciar votos</button>`}`}
+function doReset(){T=Q.map(q=>q.o.map(()=>0));store.set('tally9',T);resetAsk=false;ci=0;clase()}
+
+function route(){clase();scrollTo(0,0)}
+route();
+</script>
+
+</body>
+</html>

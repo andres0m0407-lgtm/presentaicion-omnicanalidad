@@ -3,4 +3,5 @@
 Gestión de la Distribución y la Omnicanalidad (grupo 4734A).
 
 - `index.html`: presentación
-- `consultoria/index.html`: actividad Consultoría exprés (modo clase: agregar `#clase` al final del enlace)
+- `consultoria/`: Consultoría exprés, versión para los estudiantes (repaso individual)
+- `clase/`: Consultoría exprés, panel de clase para los expositores (conteo de votos)
