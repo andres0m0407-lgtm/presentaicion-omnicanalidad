@@ -82,13 +82,13 @@ function th(){const R=document.documentElement;R.dataset.theme=(R.dataset.theme|
 /* ---------- Modo individual ---------- */
 let i=0,ans=[],pick=null,locked=false;
 function intro(){
- app.innerHTML=`<div class="top"><span class="tag" style="--c:var(--p3)">Tema 9 · Actividad</span><span class="row">${theme()}<a class="btn" href="#clase">Modo clase</a></span></div>
+ app.innerHTML=`<div class="top"><span class="tag" style="--c:var(--p3)">Tema 9 · Actividad</span><span class="row">${theme()}</span></div>
  <h1>Consultoría <span style="color:var(--p1)">exprés</span></h1>
  <p class="big" style="font-size:1.2em;font-weight:600">Eres consultor de canales. Te llegan 9 casos reales o inspirados en lo que acaban de escuchar.</p>
  <div class="card"><p>Para cada caso haces dos cosas: eliges un diagnóstico y dices qué tan seguro estás.</p>
  <p class="m">Al final ves tu mapa de brechas. Lo más útil no es lo que fallaste, sino lo que fallaste estando seguro.</p>
  <button class="go pill" onclick="start()">Empezar</button></div>
- <p class="sm m">Tus respuestas no se envían a nadie. Si quieren sumar a todo el salón, los expositores usan el modo clase con la mano alzada.</p>`}
+ <p class="sm m">Tus respuestas no se envían a nadie: el resultado es solo para ti.</p>`}
 function start(){i=0;ans=[];ask()}
 function dots(){return `<div class="dots" aria-hidden="true">${Q.map((q,k)=>`<i class="${k<ans.length?'d':''} ${k==i?'cur':''}" style="--c:${AREAS[q.a].v}"></i>`).join('')}</div>`}
 function ask(){pick=null;locked=false;const q=Q[i],A=AREAS[q.a];
