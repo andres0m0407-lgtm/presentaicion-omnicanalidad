@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Más canales, más conflictos · Tema 9</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;800&family=Figtree:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light dark;--bg:light-dark(#eef1f6,#0b1230);--ink:light-dark(#0f1b3d,#e8ecf8);--mut:light-dark(#4d5878,#9aa6c7);--ln:light-dark(#0f1b3d2e,#ffffff30);--p1:light-dark(#2c4bff,#6f86ff);--p2:light-dark(#f2b705,#ffd23f);--p3:light-dark(#d1198e,#ff5cc0);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font:400 clamp(15px,1.45vw,20px)/1.5 Figtree,system-ui,sans-serif;overflow:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:9}
+.deck{position:fixed;inset:0}
+.s{position:absolute;inset:0;visibility:hidden;overflow:auto;display:flex;flex-direction:column;justify-content:center;gap:1.1rem;padding:calc(env(safe-area-inset-top,0px) + 72px) clamp(22px,7vw,110px) calc(env(safe-area-inset-bottom,0px) + 76px);border-left:12px solid var(--a);background:radial-gradient(60vmax 50vmax at 108% -12%,color-mix(in srgb,var(--a) 24%,transparent),transparent 65%),var(--bg)}
+.s[data-p="1"]{--a:var(--p1)}.s[data-p="2"]{--a:var(--p2)}.s[data-p="3"]{--a:var(--p3)}
+.s.on{visibility:visible;z-index:2;clip-path:polygon(0 0,100% 0,100% 100%,0 100%);transition:clip-path .9s cubic-bezier(.76,0,.2,1)}
+.s.out{visibility:visible;z-index:1}
+[data-r]{opacity:0;transition:opacity .6s}
+.on [data-r]{opacity:1;transition-delay:calc(.5s + var(--d,0)*.09s)}
+h1,h2,h3{font-family:Unbounded,"Arial Black",system-ui,sans-serif;letter-spacing:-.035em;margin:0;line-height:1.05;font-weight:800}
+h1{font-size:clamp(34px,6.6vw,86px)}h2{font-size:clamp(24px,3.7vw,50px);max-width:20ch}h3{font-size:clamp(17px,2vw,26px);font-weight:500}
+p{margin:0;max-width:64ch}.m{color:var(--mut)}.big{font-size:clamp(18px,2.3vw,30px);font-weight:600;line-height:1.28;max-width:34ch}
+.who{display:flex;align-items:center;gap:.7em;font-weight:700;color:var(--mut)}.who::before{content:"";width:2.6em;height:.45em;border-radius:9em;background:var(--a)}
+.l{list-style:none;padding:0;margin:.7em 0 0}.l li{padding:.5em 0;border-top:1px solid var(--ln)}
+.split{display:grid;grid-template-columns:1fr 1fr;border:2px solid var(--ink)}
+.split>div{padding:clamp(16px,2.4vw,34px)}.split>div:first-child{background:color-mix(in srgb,var(--p1) 16%,transparent);border-right:2px solid var(--ink)}.split>div:last-child{background:color-mix(in srgb,var(--p3) 12%,transparent)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:clamp(16px,3vw,44px)}
+.cols>div{border-left:4px solid var(--a);padding-left:1em}
+.tl{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));gap:22px;border-top:3px solid var(--ink);margin-top:.5em}
+.tl>div{position:relative;padding-top:1.4em}.tl>div::before{content:"";position:absolute;top:-11px;left:0;width:19px;height:19px;border-radius:50%;background:var(--a);border:4px solid var(--bg);box-shadow:0 0 0 2px var(--ink)}
+.tl b{display:block;font-family:Unbounded,system-ui,sans-serif;font-size:.85em;margin-bottom:.3em}
+.vs{display:grid;grid-template-columns:1fr auto 1fr;align-items:stretch;gap:clamp(12px,2.5vw,32px)}
+.vs>div{padding:1em 0;border-top:4px solid var(--a)}.vs .mid{border:0;align-self:center;text-align:center;max-width:15ch;color:var(--mut);font-size:.9em}
+.legs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:18px}
+.legs>div{border-top:8px solid var(--c);padding-top:.5em;font-weight:600}.legs span{display:block;font-weight:400;color:var(--mut)}
+.grad{background:linear-gradient(90deg,var(--p1),var(--p3) 60%,var(--p2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.src{font-size:.78em;color:var(--mut);max-width:80ch}
+.top{position:fixed;top:0;left:0;right:0;z-index:6;display:flex;align-items:center;gap:12px;padding:calc(env(safe-area-inset-top,0px) + 14px) 20px 0}
+.route{flex:1;display:flex;align-items:center}.ln{flex:1;height:3px;background:var(--ln);transition:background .5s}.ln.d{background:var(--ink)}
+.n{width:16px;height:16px;border-radius:50%;border:3px solid var(--ink);background:var(--bg);padding:0;cursor:pointer;flex:none;transition:background .4s,transform .4s}
+.n.d{background:var(--c)}.n.cur{transform:scale(1.5)}
+.bar{position:fixed;bottom:0;left:0;right:0;z-index:6;display:flex;gap:8px;align-items:center;justify-content:flex-end;padding:10px 20px calc(env(safe-area-inset-bottom,0px) + 14px);font-size:.85em}
+.bar .m{margin-right:auto}
+button{font:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--ink);border-radius:99px;padding:.35em 1em;cursor:pointer}
+button:hover{background:var(--ink);color:var(--bg)}:focus-visible{outline:3px solid var(--p1);outline-offset:2px}
+.gl{position:fixed;top:0;right:0;bottom:0;width:min(450px,100%);z-index:20;background:var(--bg);border-left:2px solid var(--ink);overflow:auto;padding:calc(env(safe-area-inset-top,0px) + 18px) 22px 40px;transform:translateX(105%);visibility:hidden;transition:transform .55s cubic-bezier(.76,0,.2,1),visibility 0s .55s}
+.gl.o{transform:none;visibility:visible;transition:transform .55s cubic-bezier(.76,0,.2,1)}
+.gl header{display:flex;gap:8px;align-items:center}.gl input{flex:1;font:inherit;color:var(--ink);background:transparent;border:1.5px solid var(--ink);border-radius:99px;padding:.35em 1em}
+dt{font-weight:700;margin-top:1em}dd{margin:.1em 0 0;color:var(--mut)}
+@media(max-width:720px){.split,.vs{grid-template-columns:1fr}.split>div:first-child{border-right:0;border-bottom:2px solid var(--ink)}.bar .m{display:none}.s{border-left-width:8px}}
+@media(prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;transition-delay:0s!important}}
+</style>
+</head>
+<body>
+<div class="top"><div class="route" id="rt"></div></div>
+<main class="deck">
+
+<section class="s" data-p="1">
+  <p class="m" data-r>Gestión de la Distribución y la Omnicanalidad · Tema 9</p>
+  <h1 data-r><span class="grad">Más canales,<br>más conflictos</span></h1>
+  <p class="big" data-r>Venta directa frente a indirecta, el caso Dell y la salida omnicanal.</p>
+  <p data-r>Más canales dan más alcance, pero generan choques. La salida es estructurar, diferenciar e integrar.</p>
+  <div class="legs" data-r>
+    <div style="--c:var(--p1)">Sam Tovar<span>El marco: canales y conflicto</span></div>
+    <div style="--c:var(--p2)">Luis Cruz<span>El caso Dell y Nike</span></div>
+    <div style="--c:var(--p3)">Andrés Martínez<span>Soluciones y omnicanalidad</span></div>
+  </div>
+</section>
+
+<section class="s" data-p="1">
+  <div class="who" data-r>Sam Tovar · El marco</div>
+  <h2 data-r>Dos caminos para llegar al cliente</h2>
+  <div class="split" data-r>
+    <div><h3>Canal directo</h3><p class="m">Fabricante → cliente</p>
+      <ul class="l"><li>Control total de precio, marca y experiencia</li><li>Margen completo, sin reparto</li><li>Más inversión y todo el riesgo</li><li>Cobertura limitada</li></ul></div>
+    <div><h3>Canal indirecto</h3><p class="m">Fabricante → mayorista → minorista → cliente</p>
+      <ul class="l"><li>Mayor cobertura con menor inversión inicial</li><li>Margen compartido entre los eslabones</li><li>Menos control sobre precio, marca y atención</li></ul></div>
+  </div>
+  <p data-r><b>Sistema multicanal:</b> una misma empresa usa varios canales para llegar a distintos segmentos. Más alcance, pero también más riesgo de choque.</p>
+</section>
+
+<section class="s" data-p="1">
+  <div class="who" data-r>Sam Tovar · El marco</div>
+  <h2 data-r>Cuando los canales se pisan</h2>
+  <p class="big" data-r>Hay conflicto de canal cuando los objetivos de un miembro chocan con los de otro.</p>
+  <p class="m" data-r>Ejemplo del curso: la venta directa online frente a los distribuidores físicos.</p>
+  <div class="cols" data-r>
+    <div><h3>Causas típicas</h3><ul class="l"><li>Compiten por los mismos clientes</li><li>Precios distintos entre canales</li><li>Dobles márgenes y pérdida de control de marca</li></ul></div>
+    <div><h3>Poder</h3><ul class="l"><li>Recompensa y coerción</li><li>Experiencia</li><li>Legitimidad y referencia</li></ul></div>
+    <div><h3>Cooperación</h3><ul class="l"><li>Metas compartidas</li><li>Roles claros</li><li>Comunicación constante</li></ul></div>
+  </div>
+</section>
+
+<section class="s" data-p="2">
+  <div class="who" data-r>Luis Cruz · El caso Dell</div>
+  <h2 data-r>Dell: del modelo directo al híbrido</h2>
+  <div class="tl" data-r>
+    <div><b>Punto de partida</b>Vende directo, sin intermediarios y con PCs a la medida.</div>
+    <div><b>Enero de 2007</b>Michael Dell vuelve como CEO y abre la puerta a salir del modelo solo directo.</div>
+    <div><b>24 de mayo de 2007</b>Anuncia PCs en Wal-Mart y Sam’s Club (EE. UU., Canadá y Puerto Rico).</div>
+    <div><b>Después</b>Alianzas con minoristas como Carrefour y un programa formal de socios de canal (VARs).</div>
+  </div>
+  <p data-r><b>Por qué Wal-Mart:</b> según un vocero de Dell, el 90 % de los hogares de EE. UU. compra allí, clientes que el canal directo no alcanzaba.</p>
+  <p class="m" data-r>Michael Dell, 2007 (parafraseado): el modelo directo fue una revolución, pero no un dogma.</p>
+  <p class="src" data-r>Fuentes: ICMR (fechas, alianzas, VARs) y eWeek (cifra del 90 %, 2007).</p>
+</section>
+
+<section class="s" data-p="2">
+  <div class="who" data-r>Luis Cruz · El caso Dell</div>
+  <h2 data-r>La complejidad de fondo</h2>
+  <div class="vs" data-r>
+    <div><h3>Venta directa</h3><p>PC personalizado, fabricado bajo pedido.</p></div>
+    <div class="mid">Dos modelos operativos difíciles de optimizar a la vez</div>
+    <div><h3>Venta en retail</h3><p>Productos estandarizados, producidos y distribuidos en grandes volúmenes.</p></div>
+  </div>
+  <p class="big" data-r>La salida planteada: un modelo híbrido. El canal depende del tipo de producto y de su madurez.</p>
+  <p class="m" data-r>Los analistas estaban divididos: unos aplaudieron el cambio y otros vieron un riesgo alto. Las fuentes consultadas no traen cifras de ventas perdidas por el conflicto, así que no las mostramos.</p>
+  <p class="src" data-r>Fuentes: Kellogg Insight (recomienda un modelo híbrido según el tipo y la madurez del producto) y el blog de Michael Roberto (análisis de que retail y venta directa son parcialmente incompatibles; fuente de menor peso).</p>
+</section>
+
+<section class="s" data-p="2">
+  <div class="who" data-r>Luis Cruz · Segundo caso</div>
+  <h2 data-r>Nike: se fue directo y volvió a los aliados</h2>
+  <div class="tl" data-r>
+    <div><b>2017</b>Impulso a la venta directa al consumidor (DTC) y recorte de distribuidores multimarca.</div>
+    <div><b>2022</b>La parte de Nike en las compras de Foot Locker habría bajado de cerca de 75 % a menos de 60 %.</div>
+    <div><b>2023</b>On y Hoka ganan espacio en Dick’s. Macy’s vuelve a vender Nike en octubre.</div>
+    <div><b>Octubre de 2024</b>Elliott Hill asume como CEO y reconstruye la relación con mayoristas.</div>
+  </div>
+  <p class="big" data-r>Hill reconoció que algunos socios sintieron que Nike les dio la espalda.</p>
+  <p class="m" data-r>Lección: desatender el canal indirecto abre espacio a la competencia. El conflicto no desaparece, se gestiona.</p>
+  <p class="src" data-r>Fuentes: Retail Dive (Hill y los socios, Macy’s). La cifra de Foot Locker es de un analista citado por Apparel Resources. El recorte a la mitad de distribuidores multimarca viene de IADS, organización que no pudimos verificar.</p>
+</section>
+
+<section class="s" data-p="3">
+  <div class="who" data-r>Andrés Martínez · Colombia</div>
+  <h2 data-r>Colombia: un mismo cliente, tres canales</h2>
+  <div class="cols" data-r>
+    <div><h3>Tradicional</h3><p>Tiendas de barrio: cercanía, fiado y trato personal.</p></div>
+    <div><h3>Moderno</h3><p>Supermercados e hipermercados como Éxito: surtido y promociones.</p></div>
+    <div><h3>Hard discount</h3><p>D1, Ara e Ísimo: pocas referencias, precio bajo y muchos puntos.</p></div>
+  </div>
+  <p class="big" data-r>Un fabricante como Postobón o Alpina debe atender los tres sin que uno canibalice al otro.</p>
+  <p class="m" data-r>Kantar, citado por La República, reporta que el hard discount pasó de 8 % (2015) a 25 % (2023). Otras fuentes dan cifras distintas según cómo se mida, por eso conviene citar la fuente.</p>
+</section>
+
+<section class="s" data-p="3">
+  <div class="who" data-r>Andrés Martínez · Soluciones</div>
+  <h2 data-r>La salida: estructurar, diferenciar e integrar</h2>
+  <div class="cols" data-r>
+    <div><h3>Estructurar</h3><p>Los sistemas verticales de marketing (SVM) coordinan el canal: corporativo, contractual (franquicias) o administrado.</p><p class="m">Reducen el conflicto y aumentan el control.</p></div>
+    <div><h3>Diferenciar</h3><p>Principio de Gause: dos canales idénticos terminan chocando. Deben distinguirse en servicio, precio, formato o segmento.</p><p class="m">Postobón y Alpina atienden el canal tradicional y el moderno con estrategias distintas. Nike tiene e-commerce propio sin eliminar a sus distribuidores.</p></div>
+    <div><h3>Integrar</h3><p>Omnicanalidad: mensaje coherente, inventario y precios unificados, experiencia sin fricciones.</p><p class="m">Detrás: el WMS ordena el inventario, el TMS planea el transporte y la última milla cierra la entrega.</p></div>
+  </div>
+</section>
+
+<section class="s" data-p="3">
+  <div class="who" data-r>Andrés Martínez · Omnicanalidad en la práctica</div>
+  <h2 data-r>Grupo Éxito: Compra y Recoge</h2>
+  <p class="big" data-r>El cliente compra por internet y retira en la tienda. Un canal alimenta al otro en vez de pelear.</p>
+  <div class="cols" data-r>
+    <div><h3>+23,5 %</h3><p>Crecimiento de las ventas de Compra y Recoge en 2021.</p></div>
+    <div><h3>28 %</h3><p>Parte de las ventas omnicanal que representó ese servicio.</p></div>
+  </div>
+  <p class="m" data-r>Requiere inventario unificado, bodega (WMS) y una entrega bien coordinada.</p>
+  <p class="src" data-r>Fuentes: informe de resultados 2021 de Grupo Éxito (cifras) y DPL News (la compañía presenta la omnicanalidad como ventaja competitiva). Son datos de la propia empresa.</p>
+</section>
+
+<section class="s" data-p="3">
+  <div class="who" data-r>Andrés Martínez · Cierre</div>
+  <h1 data-r style="font-size:clamp(28px,5vw,66px)">Más canales no es peor, si se coordinan.</h1>
+  <p class="big" data-r>Pregunta para la audiencia: ¿qué canal elegirían para vender un producto nuevo y por qué?</p>
+  <p data-r><button onclick="tg(1)">Abrir el glosario</button> <button onclick="cp()" id="cpb">Copiar enlace</button></p>
+</section>
+
+<section class="s" data-p="3">
+  <div class="who" data-r>Fuentes</div>
+  <h2 data-r>De dónde sale cada dato</h2>
+  <div class="cols" data-r style="font-size:.88em">
+    <div><h3>Dell</h3><ul class="l"><li>ICMR, “Dell Inc: Moving Beyond Direct Sales Model”</li><li>eWeek, “Dell to Sell Through Wal-Mart” (2007)</li><li>Kellogg Insight, “A New Channel Strategy for Dell”</li><li>Blog de Michael Roberto (análisis, menor peso)</li></ul></div>
+    <div><h3>Nike</h3><ul class="l"><li>Retail Dive (Elliott Hill, Macy’s)</li><li>Apparel Resources (analista sobre Foot Locker)</li><li>IADS (sin verificar)</li></ul></div>
+    <div><h3>Colombia</h3><ul class="l"><li>Grupo Éxito, informe de resultados 2021</li><li>DPL News</li><li>Kantar vía La República</li><li>Diapositivas del curso (unidades 1, 2, 3 y 5)</li></ul></div>
+  </div>
+  <p class="src" data-r>Cada fuente tiene su explicación en el glosario (búsqueda: “Fuente”). Cifras que no pudimos confirmar de forma independiente están marcadas.</p>
+</section>
+
+</main>
+
+<div class="bar">
+  <span class="m">← → para moverte · G glosario · T tema · F pantalla completa</span>
+  <span id="cnt" class="m" style="margin:0"></span>
+  <button onclick="go(i-1)">Anterior</button><button onclick="go(i+1)">Siguiente</button><button onclick="tg()">Glosario</button><button onclick="th()">Tema</button>
+</div>
+
+<aside class="gl" id="gl" aria-label="Glosario">
+  <header><input id="q" type="search" placeholder="Buscar un término"><button onclick="tg(0)">Cerrar</button></header>
+  <dl id="dl"></dl>
+</aside>
+
+<script>
+const S=[...document.querySelectorAll('.s')],N=S.length,$=s=>document.querySelector(s),rt=$('#rt'),R=document.documentElement;
+const G=`Canal de distribución|Organizaciones que llevan el producto al consumidor.
+Canal directo|El fabricante vende al cliente final, sin intermediarios.
+Canal indirecto|Vende mediante mayoristas, minoristas u otros intermediarios.
+Intermediario|Quien compra, vende o facilita la venta entre fabricante y cliente.
+Mayorista|Compra grandes volúmenes y los revende a minoristas.
+Minorista|Vende al consumidor final.
+Margen|Ganancia por venta; en un canal indirecto se reparte entre los eslabones.
+Cobertura|Cuántos puntos de venta o clientes alcanza el producto.
+Conflicto de canal|Choque de objetivos entre miembros del canal.
+Canibalización|Un canal le quita ventas a otro de la misma empresa.
+Poder de canal|Capacidad de un miembro para influir en las decisiones de otro.
+Sistema multicanal|Varios canales para llegar a distintos segmentos.
+Canal híbrido|Combina canal directo e indirecto.
+SVM|Sistema vertical de marketing: canal coordinado para reducir el conflicto. Puede ser corporativo, contractual o administrado.
+VAR|Revendedor de valor agregado: suma instalación, soporte u otros servicios al producto.
+D2C|Direct to Consumer: venta directa de la marca al consumidor final.
+Principio de Gause|Competidores idénticos no pueden coexistir; deben diferenciarse.
+Omnicanalidad|Canales integrados para que el cliente perciba una sola marca.
+Inventario unificado|Un solo stock visible desde todos los canales.
+Fulfillment|Preparar y entregar el pedido.
+WMS|Software que gestiona la operación dentro de la bodega.
+TMS|Software que planifica y controla el transporte.
+Última milla|Último tramo de la entrega, hasta el cliente final.
+Hard discount|Tienda de pocas referencias y precios bajos (D1, Ara, Ísimo).
+Fricción|Obstáculo que el cliente encuentra al pasar de un canal a otro.
+Fuente · Diapositivas del curso|Material del profesor de las unidades 1, 2, 3 y 5. Base teórica: canales, conflicto, SVM, omnicanalidad.
+Fuente · ICMR|IBS Center for Management Research, centro de casos de estudio de negocios (India). Fuente del caso Dell: fechas, alianzas, VARs.
+Fuente · eWeek|Revista estadounidense de tecnología empresarial. Reportó el anuncio de Dell con Wal-Mart en 2007 y la cifra del 90 % de hogares.
+Fuente · Kellogg Insight|Revista de la Kellogg School of Management (Northwestern University) con investigación de sus profesores. Aporta el enfoque híbrido.
+Fuente · Blog de Michael Roberto|Análisis personal de un profesor, no una publicación revisada por pares. Peso menor; se usa como apoyo.
+Fuente · Retail Dive|Medio especializado en noticias de comercio minorista. Fuente de Nike: Elliott Hill y los socios.
+Fuente · Apparel Resources|Publicación del sector textil y de moda. Cita a un analista sobre la parte de Nike en Foot Locker.
+Fuente · IADS|Organización que no pudimos verificar. Su dato sobre recortar a la mitad los distribuidores de Nike va con reserva.
+Fuente · Grupo Éxito, informe 2021|Reporte de resultados de la propia empresa. Cifras de Compra y Recoge; son datos de parte interesada.
+Fuente · DPL News|Medio especializado en retail y consumo. Recoge que Éxito ve la omnicanalidad como ventaja competitiva.
+Fuente · Kantar|Empresa de investigación de mercados que mide el consumo de los hogares. Sus cifras llegan aquí a través de La República y Pulzo.
+Fuente · La República|Diario colombiano de economía y negocios. Cita a Kantar sobre el hard discount.
+Fuente · Pulzo y Las2orillas|Portales de noticias colombianos. Dan cifras del hard discount que difieren entre sí; no se mezclan en una frase.
+Fuente · Bancolombia / Cibest y Predik|Citadas en una diapositiva del curso (7 % a 14 % del gasto de los hogares, 2019 a 2025). No pudimos confirmarlas de forma independiente.`.split('\n').map(l=>l.split('|'));
+const draw=f=>{$('#dl').innerHTML=G.filter(([t,d])=>(t+d).toLowerCase().includes(f)).map(([t,d])=>`<dt>${t}</dt><dd>${d}</dd>`).join('')};
+draw('');$('#q').oninput=e=>draw(e.target.value.toLowerCase());
+let i=0;
+S.forEach((s,k)=>{s.querySelectorAll('[data-r]').forEach((e,j)=>e.style.setProperty('--d',j));
+ const n=document.createElement('button');n.className='n';n.style.setProperty('--c',`var(--p${s.dataset.p})`);n.setAttribute('aria-label','Diapositiva '+(k+1));n.onclick=()=>go(k);
+ if(k){const l=document.createElement('span');l.className='ln';rt.append(l)}rt.append(n)});
+function go(k,h){k=Math.max(0,Math.min(N-1,k));const o=S[i],n=S[k];if(k==i&&n.classList.contains('on'))return;
+ if(o!==n){o.classList.remove('on');o.classList.add('out');setTimeout(()=>o.classList.remove('out'),950)}
+ n.classList.remove('out');n.style.transition='none';
+ n.style.clipPath=k<i?'polygon(0 0,0 0,-14% 100%,0 100%)':'polygon(100% 0,114% 0,100% 100%,100% 100%)';
+ n.offsetWidth;n.style.transition='';n.style.clipPath='';n.classList.add('on');i=k;
+ rt.querySelectorAll('.n').forEach((b,j)=>{b.classList.toggle('d',j<=k);b.classList.toggle('cur',j==k)});
+ rt.querySelectorAll('.ln').forEach((l,j)=>l.classList.toggle('d',j<k));
+ $('#cnt').textContent=(k+1)+' / '+N;
+ if(!h)try{history.replaceState(null,'','#'+(k+1))}catch(e){}}
+function cp(){const b=$('#cpb'),u=location.href;const ok=()=>b.textContent='Enlace copiado';navigator.clipboard.writeText(u).then(ok,()=>{b.textContent=u})}
+function tg(v){const g=$('#gl');g.classList.toggle('o',v===undefined?!g.classList.contains('o'):!!v);if(g.classList.contains('o'))setTimeout(()=>$('#q').focus(),300)}
+function th(){R.dataset.theme=(R.dataset.theme||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'))=='dark'?'light':'dark'}
+addEventListener('keydown',e=>{if(e.target.id=='q'){if(e.key=='Escape')tg(0);return}
+ const k=e.key;if(['ArrowRight','ArrowDown','PageDown',' '].includes(k)){e.preventDefault();go(i+1)}
+ else if(['ArrowLeft','ArrowUp','PageUp'].includes(k))go(i-1);
+ else if(k=='Home')go(0);else if(k=='End')go(N-1);
+ else if(k=='g'||k=='G')tg();else if(k=='Escape')tg(0);else if(k=='t'||k=='T')th();
+ else if(k=='f'||k=='F')(document.fullscreenElement?document.exitFullscreen():R.requestFullscreen()).catch(()=>{})});
+let x0=0;addEventListener('touchstart',e=>x0=e.touches[0].clientX,{passive:true});
+addEventListener('touchend',e=>{const d=e.changedTouches[0].clientX-x0;if(Math.abs(d)>70)go(i+(d<0?1:-1))});
+addEventListener('hashchange',()=>go((parseInt(location.hash.slice(1))||1)-1,1));
+go((parseInt(location.hash.slice(1))||1)-1,1);
+</script>
+</body>
+</html>
